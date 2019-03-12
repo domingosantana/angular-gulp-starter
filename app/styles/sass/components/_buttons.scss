@@ -1,0 +1,18 @@
+.button {
+  font-family: 'DeccanSemibold';
+  font-size: 22px;
+  line-height: 22px;
+  letter-spacing: 0;
+  cursor: pointer;
+  padding: 20px;
+  display: inline-flex;
+  align-items: center;
+
+  img {
+    margin-left: 15px;
+  }
+
+  &.bg-white {
+    padding: 0;
+  }
+}

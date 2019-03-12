@@ -1,0 +1,112 @@
+header {
+  font-size: 15px;
+  padding: 15px 0;
+
+  @include breakpoint-up(md) {
+    padding: 25px 0;
+  }
+}
+
+.menu_bar {
+  display: none;
+
+  @include breakpoint-down(sm) {
+    display: block;
+  }
+}
+
+nav.menu {
+  ul {
+    list-style: none;
+
+    a {
+      color: $dark-grey;
+      cursor: pointer;
+
+      &:hover {
+        color: $red;
+      }
+
+      li {
+        float: left;
+
+        @include breakpoint-down(sm) {
+          display: block;
+          float: none;
+          border-bottom: 1px solid rgba(255,255,255, .3);
+          padding: 15px 0;
+        }
+
+      }
+    }
+  }
+
+  @include breakpoint-down(sm) {
+    width: 80%;
+    height: 100%;
+    left: -100%;
+    margin: 0;
+    position: fixed;
+    background-color: $red;
+    z-index: 3;
+    padding: 40px 30px;
+    top: 0;
+    display: block;
+    float: none;
+
+    a {
+      color: $white !important;
+
+      &:hover {
+        color: $white !important;
+      }
+    }
+  }
+}
+
+.hamburger {
+  width: 34px;
+  height: 27px;
+  cursor: pointer;
+
+  .bar1, .bar2, .bar3 {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    display: block;
+    padding: 0;
+    -webkit-appearance: none;
+    width: 34px;
+    height: 5px;
+    border-radius: 7px;
+    background-color: $dark-grey;
+    -webkit-transition: all 0.2s ease-in;
+    -webkit-transform: rotate(0deg);
+  }
+
+  .bar1 {
+    &.active {
+      top: 10px;
+      -webkit-transform: rotate(-135deg);
+      -webkit-transition: all 0.2s ease-in;
+    }
+  }
+
+  .bar2 {
+    top: 10px;
+    &.active {
+      right: 34px;
+      background-color: transparent;
+      -webkit-transition: all 0.2s ease-in;
+    }
+  }
+
+  .bar3 {
+    top: 20px;
+    &.active {
+      top: 10px;
+      -webkit-transform: rotate(135deg);
+      -webkit-transition: all 0.2s ease-in;
+    }
+  }
+}
