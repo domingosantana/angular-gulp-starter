@@ -49857,14 +49857,8 @@ img {
   font-family: 'DeccanSemibold';
 }
 
-@font-face {
-  font-family: 'DeccanSemibold';
-  src: url("../fonts/DeccanSemibold.eot");
-  src: url("../fonts/DeccanSemibold.eot") format("embedded-opentype"), url("../fonts/DeccanSemibold.woff2") format("woff2"), url("../fonts/DeccanSemibold.woff") format("woff"), url("../fonts/DeccanSemibold.ttf") format("truetype"), url("../fonts/DeccanSemibold.svg#DeccanSemibold") format("svg");
-}
-
 h1 {
-  font-family: 'DeccanSemibold';
+  font-family: "Montserrat", sans-serif;
   font-size: 44px;
   line-height: 44px;
   margin: 0;
@@ -49875,21 +49869,6 @@ h1 {
   h1 {
     font-size: 62px;
     line-height: 62px;
-  }
-}
-
-h2 {
-  font-size: 34px;
-  line-height: 34px;
-  font-family: 'DeccanSemibold';
-  margin: 0;
-  letter-spacing: 0;
-}
-
-@media (min-width: 768px) {
-  h2 {
-    font-size: 44px;
-    line-height: 44px;
   }
 }
 

@@ -12,7 +12,7 @@ body {
   font-size: 17px;
   line-height: 27px;
   letter-spacing: 2px;
-  color: $dark-grey;
+  color: $black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -24,9 +24,9 @@ a {
   -webkit-transition-duration: 0.5s;
   -webkit-transition-timing-function: ease;
   text-decoration: none;
-  color: $dark-grey;
+  color: $black;
 
   &:hover {
-    color: $red;
+    color: $black;
   }
 }

@@ -4,16 +4,12 @@ $font: 'Montserrat', sans-serif;
 
 // Colors.
 
-$white: #fff !default;
-$red: #F53440 !default;
-$light-grey: #98999B !default;
-$dark-grey: #575756 !default;
+$white: #ffffff !default;
+$black: #000000 !default;
 
 $colors: (
   white: $white,
-  red: $red,
-  light-grey: $light-grey,
-  dark-grey: $dark-grey
+  black: $black
 ) !default;
 
 // Grid breakpoints.
