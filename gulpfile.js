@@ -22,6 +22,9 @@ gulp.task('serve', function () {
     port: 8080,
     server: {
       baseDir: ['app'],
+      routes: {
+        "/node_modules": "node_modules"
+      },
       middleware: [
         modRewrite([
           '!\\.\\w+$ /index.html [L]'
