@@ -1,17 +1,17 @@
-const { src, dest, watch, series, parallel } = require('gulp');
-const del = require('del');
-const sass = require('gulp-sass');
-const autoprefixer = require('gulp-autoprefixer');
-const usemin = require('gulp-usemin');
-const uglify = require('gulp-uglify');
-const htmlmin = require('gulp-htmlmin');
-const cssnano = require('gulp-cssnano');
-const rev = require('gulp-rev');
-const browserSync = require('browser-sync');
-const modRewrite = require('connect-modrewrite');
-const imagemin = require('gulp-imagemin');
+var gulp = require('gulp');
+var del = require('del');
+var sass = require('gulp-sass');
+var autoprefixer = require('gulp-autoprefixer');
+var usemin = require('gulp-usemin');
+var uglify = require('gulp-uglify');
+var htmlmin = require('gulp-htmlmin');
+var cssnano = require('gulp-cssnano');
+var rev = require('gulp-rev');
+var browserSync = require('browser-sync').create();
+var modRewrite = require('connect-modrewrite');
+var imagemin = require('gulp-imagemin');
 
-// App server
+// Serve "src" directory
 function serve() {
   browserSync.init(null, {
     port: 8080,
@@ -27,12 +27,12 @@ function serve() {
       ]
     }
   });
-  gulp.watch('./src/styles/sass/**/*.scss', ['sass']);
+  gulp.watch('./src/styles/sass/**/*.scss', sass);
   gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
 }
 
-// Dist server
-function try() {
+// Serve "dist" directory
+function test() {
   browserSync.init({
     port: 9000,
     server: {
@@ -49,7 +49,8 @@ function try() {
 
 // Compile sass to css
 function sass() {
-  return gulp.src('./src/styles/sass/**/*.scss')
+  return gulp
+  .src('./src/styles/sass/**/*.scss')
   .pipe(sass({
     errLogToConsole: true,
     outputStyle: 'expanded'
@@ -58,7 +59,7 @@ function sass() {
     browsers: ['last 2 versions'],
     cascade: false
   }))
-  .pipe(gulp.dest('./src/styles'))
+  .pipe(dest('./src/styles'))
   .pipe(browserSync.stream());
 }
 
@@ -69,31 +70,35 @@ function clean() {
 
 // Compile "index.html", css & js files
 function compile() {
-  gulp.src('./src/index.html')
+  return gulp
+  .src('./src/index.html')
   .pipe(usemin({
     css: [cssnano(), 'concat', rev()],
     html: [htmlmin({collapseWhitespace: true})],
     js: [uglify(), rev()]
   }))
-  .pipe(gulp.dest('./dist'))
+  .pipe(dest('./dist'))
 }
 
 // Copy & minify "views" directory
 function views() {
-  gulp.src('./src/views/**/*')
+  return gulp
+  .src('./src/views/**/*')
   .pipe(htmlmin({collapseWhitespace: true}))
-  .pipe(gulp.dest('./dist/views'))
+  .pipe(dest('./dist/views'))
 }
 
 // Copy "fonts" directory
 function fonts() {
-  gulp.src('./src/assets/fonts/**/*')
-  .pipe(gulp.dest('./dist/assets/fonts'))
+  return gulp
+  .src('./src/assets/fonts/**/*')
+  .pipe(dest('./dist/assets/fonts'))
 }
 
 // Minify images
 function images() {
-  gulp.src('src/assets/images/**/*')
+  return gulp
+  .src('src/assets/images/**/*')
   .pipe(imagemin([
     imagemin.gifsicle({interlaced: true}),
     imagemin.jpegtran({progressive: true}),
@@ -105,19 +110,20 @@ function images() {
       ]
     })
   ]))
-  .pipe(gulp.dest('./dist/assets/images'))
+  .pipe(dest('./dist/assets/images'))
 }
 
 // Define complex tasks
-const serve = gulp.series(sass, serve);
 const build = gulp.series(clean, sass, compile, views, fonts, images);
 
 // Expose tasks to CLI
-exports.clean = clean;
+exports.default = serve;
+exports.serve = serve;
+exports.test = test;
 exports.sass = sass;
+exports.clean = clean;
 exports.compile = compile;
 exports.views = views;
 exports.fonts = fonts;
 exports.images = images;
-exports.default = serve;
 exports.build = build;
