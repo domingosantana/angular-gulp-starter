@@ -1,27 +1,22 @@
-'use strict';
-
-var gulp = require('gulp');
-var usemin = require('gulp-usemin');
-var uglify = require('gulp-uglify');
-var htmlmin = require('gulp-htmlmin');
-var cssnano = require('gulp-cssnano');
-var rev = require('gulp-rev');
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var browserSync = require('browser-sync');
-var modRewrite = require('connect-modrewrite');
-var imagemin = require('gulp-imagemin');
-var del = require('del');
-
-gulp.task('default', ['sass', 'serve']);
-gulp.task('build', ['clean', 'sass', 'compile', 'views', 'fonts', 'images']);
+const { src, dest, watch, series, parallel } = require('gulp');
+const del = require('del');
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+const usemin = require('gulp-usemin');
+const uglify = require('gulp-uglify');
+const htmlmin = require('gulp-htmlmin');
+const cssnano = require('gulp-cssnano');
+const rev = require('gulp-rev');
+const browserSync = require('browser-sync');
+const modRewrite = require('connect-modrewrite');
+const imagemin = require('gulp-imagemin');
 
 // App server
-gulp.task('serve', function () {
+function serve() {
   browserSync.init(null, {
     port: 8080,
     server: {
-      baseDir: ['app'],
+      baseDir: ['src'],
       routes: {
         "/node_modules": "node_modules"
       },
@@ -32,12 +27,12 @@ gulp.task('serve', function () {
       ]
     }
   });
-  gulp.watch('./app/styles/sass/**/*.scss', ['sass']);
-  gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
-});
+  gulp.watch('./src/styles/sass/**/*.scss', ['sass']);
+  gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
+}
 
 // Dist server
-gulp.task('try', function () {
+function try() {
   browserSync.init({
     port: 9000,
     server: {
@@ -49,12 +44,12 @@ gulp.task('try', function () {
       ]
     }
   });
-  gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
-});
+  gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
+}
 
 // Compile sass to css
-gulp.task('sass', function () {
-  return gulp.src('./app/styles/sass/**/*.scss')
+function sass() {
+  return gulp.src('./src/styles/sass/**/*.scss')
   .pipe(sass({
     errLogToConsole: true,
     outputStyle: 'expanded'
@@ -63,42 +58,42 @@ gulp.task('sass', function () {
     browsers: ['last 2 versions'],
     cascade: false
   }))
-  .pipe(gulp.dest('./app/styles'))
+  .pipe(gulp.dest('./src/styles'))
   .pipe(browserSync.stream());
-});
+}
 
 // Clean "dist" directory
-gulp.task('clean', function () {
+function clean() {
   return del('./dist');
-});
+}
 
 // Compile "index.html", css & js files
-gulp.task('compile', function () {
-  gulp.src('./app/index.html')
+function compile() {
+  gulp.src('./src/index.html')
   .pipe(usemin({
     css: [cssnano(), 'concat', rev()],
     html: [htmlmin({collapseWhitespace: true})],
     js: [uglify(), rev()]
   }))
   .pipe(gulp.dest('./dist'))
-});
+}
 
 // Copy & minify "views" directory
-gulp.task('views', function () {
-  gulp.src('./app/views/**/*')
+function views() {
+  gulp.src('./src/views/**/*')
   .pipe(htmlmin({collapseWhitespace: true}))
   .pipe(gulp.dest('./dist/views'))
-});
+}
 
 // Copy "fonts" directory
-gulp.task('fonts', function () {
-  gulp.src('./app/assets/fonts/**/*')
+function fonts() {
+  gulp.src('./src/assets/fonts/**/*')
   .pipe(gulp.dest('./dist/assets/fonts'))
-});
+}
 
 // Minify images
-gulp.task('images', function () {
-  gulp.src('app/assets/images/**/*')
+function images() {
+  gulp.src('src/assets/images/**/*')
   .pipe(imagemin([
     imagemin.gifsicle({interlaced: true}),
     imagemin.jpegtran({progressive: true}),
@@ -111,4 +106,18 @@ gulp.task('images', function () {
     })
   ]))
   .pipe(gulp.dest('./dist/assets/images'))
-});
+}
+
+// Define complex tasks
+const serve = gulp.series(sass, serve);
+const build = gulp.series(clean, sass, compile, views, fonts, images);
+
+// Expose tasks to CLI
+exports.clean = clean;
+exports.sass = sass;
+exports.compile = compile;
+exports.views = views;
+exports.fonts = fonts;
+exports.images = images;
+exports.default = serve;
+exports.build = build;
