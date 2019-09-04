@@ -27,7 +27,7 @@ function serve() {
       ]
     }
   });
-  gulp.watch('./app/styles/sass/**/*.scss', sass);
+  gulp.watch('./app/styles/scss/**/*.scss', sass);
   gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
 }
 
@@ -50,7 +50,7 @@ function try() {
 // Compilar sass a css
 function sass() {
   return gulp
-  .src('./app/styles/sass/**/*.scss')
+  .src('./app/styles/scss/**/*.scss')
   .pipe(sass({
     errLogToConsole: true,
     outputStyle: 'expanded'
