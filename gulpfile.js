@@ -11,7 +11,7 @@ var browserSync = require('browser-sync').create();
 var modRewrite = require('connect-modrewrite');
 var imagemin = require('gulp-imagemin');
 
-// Serve "src" directory
+// Servir directorio "src"
 function serve() {
   browserSync.init(null, {
     port: 8080,
@@ -31,7 +31,7 @@ function serve() {
   gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
 }
 
-// Serve "dist" directory
+// Servir directorio "dist"
 function try() {
   browserSync.init({
     port: 9000,
@@ -47,7 +47,7 @@ function try() {
   gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
 }
 
-// Compile sass to css
+// Compilar sass a css
 function sass() {
   return gulp
   .src('./src/styles/sass/**/*.scss')
@@ -63,12 +63,12 @@ function sass() {
   .pipe(browserSync.stream());
 }
 
-// Clean "dist" directory
+// Limpiar directorio "dist"
 function clean() {
   return del('./dist');
 }
 
-// Compile "index.html", css & js files
+// Compilar "index.html" y archivos css & js
 function compile() {
   return gulp
   .src('./src/index.html')
@@ -80,7 +80,7 @@ function compile() {
   .pipe(dest('./dist'))
 }
 
-// Copy & minify "views" directory
+// Copiar & minificar directorio "views"
 function views() {
   return gulp
   .src('./src/views/**/*')
@@ -88,14 +88,14 @@ function views() {
   .pipe(dest('./dist/views'))
 }
 
-// Copy "fonts" directory
+// Copiar directorio "fonts"
 function fonts() {
   return gulp
   .src('./src/assets/fonts/**/*')
   .pipe(dest('./dist/assets/fonts'))
 }
 
-// Minify images
+// Minificar imágenes
 function images() {
   return gulp
   .src('src/assets/images/**/*')
@@ -113,10 +113,10 @@ function images() {
   .pipe(dest('./dist/assets/images'))
 }
 
-// Define complex tasks
+// Tareas complejas
 const build = gulp.series(clean, sass, compile, views, fonts, images);
 
-// Expose tasks to CLI
+// Tareas para CLI
 exports.default = serve;
 exports.serve = serve;
 exports.try = try;

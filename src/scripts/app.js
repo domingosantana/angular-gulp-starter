@@ -5,8 +5,8 @@ angular.module('app', ['ngRoute'])
   $locationProvider.html5Mode(true);
 
   $routeProvider
-    .when('/', { templateUrl: 'views/home.html', controller: 'MyController' }) // View as File with Controller
-    // .when('/view', { template: 'views/view.html' }) // View as Text without Controller
+    .when('/', { templateUrl: 'views/home.html', controller: 'MyController' })
+    // .when('/view', { template: 'views/view.html' })
     .otherwise({ redirectTo: '/' });
 
 }]);
