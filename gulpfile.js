@@ -16,7 +16,7 @@ function serve() {
   browserSync.init(null, {
     port: 8080,
     server: {
-      baseDir: ['src'],
+      baseDir: ['app'],
       routes: {
         "/node_modules": "node_modules"
       },
@@ -27,8 +27,8 @@ function serve() {
       ]
     }
   });
-  gulp.watch('./src/styles/sass/**/*.scss', sass);
-  gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
+  gulp.watch('./app/styles/sass/**/*.scss', sass);
+  gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
 }
 
 // Servir directorio "dist"
@@ -44,13 +44,13 @@ function try() {
       ]
     }
   });
-  gulp.watch(['./src/**/*.*']).on('change', browserSync.reload);
+  gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
 }
 
 // Compilar sass a css
 function sass() {
   return gulp
-  .src('./src/styles/sass/**/*.scss')
+  .src('./app/styles/sass/**/*.scss')
   .pipe(sass({
     errLogToConsole: true,
     outputStyle: 'expanded'
@@ -59,7 +59,7 @@ function sass() {
     browsers: ['last 2 versions'],
     cascade: false
   }))
-  .pipe(dest('./src/styles'))
+  .pipe(dest('./app/styles'))
   .pipe(browserSync.stream());
 }
 
@@ -71,7 +71,7 @@ function clean() {
 // Compilar "index.html" y archivos css & js
 function compile() {
   return gulp
-  .src('./src/index.html')
+  .src('./app/index.html')
   .pipe(usemin({
     css: [cssnano(), 'concat', rev()],
     html: [htmlmin({collapseWhitespace: true})],
@@ -83,7 +83,7 @@ function compile() {
 // Copiar & minificar directorio "views"
 function views() {
   return gulp
-  .src('./src/views/**/*')
+  .src('./app/views/**/*')
   .pipe(htmlmin({collapseWhitespace: true}))
   .pipe(dest('./dist/views'))
 }
@@ -91,14 +91,14 @@ function views() {
 // Copiar directorio "fonts"
 function fonts() {
   return gulp
-  .src('./src/assets/fonts/**/*')
+  .src('./app/assets/fonts/**/*')
   .pipe(dest('./dist/assets/fonts'))
 }
 
 // Minificar imágenes
 function images() {
   return gulp
-  .src('src/assets/images/**/*')
+  .src('app/assets/images/**/*')
   .pipe(imagemin([
     imagemin.gifsicle({interlaced: true}),
     imagemin.jpegtran({progressive: true}),
