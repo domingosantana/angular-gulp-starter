@@ -1,7 +1,0 @@
-// Background colors.
-
-@each $name, $value in $colors {
-  .bg-#{$name} {
-    background-color : $value !important;
-  }
-}
