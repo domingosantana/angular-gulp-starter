@@ -32,7 +32,7 @@ function serve() {
 }
 
 // Servir directorio "dist"
-function try() {
+function dist() {
   browserSync.init({
     port: 9000,
     server: {
@@ -119,7 +119,7 @@ const build = gulp.series(clean, sass, compile, views, fonts, images);
 // Tareas para CLI
 exports.default = serve;
 exports.serve = serve;
-exports.try = try;
+exports.dist = dist;
 exports.sass = sass;
 exports.clean = clean;
 exports.compile = compile;
