@@ -27,7 +27,7 @@ function serve() {
       ]
     }
   });
-  gulp.watch('./app/styles/scss/**/*.scss', sass);
+  gulp.watch('./app/styles/scss/**/*.scss', style);
   gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
 }
 
@@ -48,7 +48,7 @@ function dist() {
 }
 
 // Compilar sass a css
-function sass() {
+function style() {
   return gulp
   .src('./app/styles/scss/**/*.scss')
   .pipe(sass({
@@ -114,13 +114,13 @@ function images() {
 }
 
 // Tareas complejas
-const build = gulp.series(clean, sass, compile, views, fonts, images);
+const build = gulp.series(clean, style, compile, views, fonts, images);
 
 // Tareas para CLI
 exports.default = serve;
 exports.serve = serve;
 exports.dist = dist;
-exports.sass = sass;
+exports.style = style;
 exports.clean = clean;
 exports.compile = compile;
 exports.views = views;
