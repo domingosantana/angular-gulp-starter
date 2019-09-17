@@ -2,12 +2,10 @@
 
 Proyecto en Angular 1 + Gulp 4.
 
-## Empezando
-
 ### Ejecución del proyecto
 ```
 npm install
-gulp o gulp serve
+gulp (sirve directorio "src")
 ```
 
 ### Compilación del proyecto para producción
