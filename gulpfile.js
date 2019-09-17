@@ -1,104 +1,130 @@
-var gulp = require('gulp');
-var del = require('del');
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var usemin = require('gulp-usemin');
-var uglify = require('gulp-uglify');
-var htmlmin = require('gulp-htmlmin');
-var cssnano = require('gulp-cssnano');
-var rev = require('gulp-rev');
-var browserSync = require('browser-sync').create();
-var modRewrite = require('connect-modrewrite');
-var imagemin = require('gulp-imagemin');
+const gulp = require("gulp"),
+browserify = require("browserify"),
+babelify = require("babelify"),
+source = require("vinyl-source-stream"),
+buffer = require("vinyl-buffer"),
+uglify = require("gulp-uglify"),
+htmlmin = require("gulp-htmlmin"),
+postcss = require("gulp-postcss"),
+cssnano = require("cssnano"),
+del = require("del"),
+sass = require('gulp-sass'),
+autoprefixer = require("autoprefixer"),
+rename = require("gulp-rename"),
+imagemin = require('gulp-imagemin'),
+browserSync = require("browser-sync").create();
+
+const paths = {
+  source: "src",
+  build: "build",
+  styles: {
+    scss: 'src/styles/scss/**/*.scss',
+    css: 'src/styles/*.css',
+    dest: 'build/styles/'
+  },
+  scripts: {
+    src: 'src/scripts/**/*.js',
+    dest: 'build/scripts/'
+  },
+  html: {
+    src: 'src/**/*.html',
+    dest: 'build/'
+  },
+  fonts: {
+    src: 'src/assets/fonts/**/*',
+    dest: 'build/assets/fonts'
+  },
+  images: {
+    src: 'src/assets/images/**/*',
+    dest: 'build/assets/images'
+  }
+};
+
+// Compilar scss a css
+function styles() {
+  return (
+    gulp
+    .src(paths.styles.scss)
+    .pipe(sass({
+      errLogToConsole: true,
+      outputStyle: 'expanded'
+    }))
+    .on("error", sass.logError)
+    .pipe(postcss([autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    })]))
+    .pipe(gulp.dest('src/styles'))
+    .pipe(browserSync.stream())
+  );
+}
 
 // Servir directorio "src"
-function serve() {
-  browserSync.init(null, {
+function watch() {
+  browserSync.init({
     port: 8080,
     server: {
-      baseDir: ['app'],
+      baseDir: "./src",
       routes: {
         "/node_modules": "node_modules"
-      },
-      middleware: [
-        modRewrite([
-          '!\\.\\w+$ /index.html [L]'
-        ])
-      ]
+      }
     }
   });
-  gulp.watch('./app/styles/scss/**/*.scss', style);
-  gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
-}
-
-// Servir directorio "dist"
-function dist() {
-  browserSync.init({
-    port: 9000,
-    server: {
-      baseDir: ['dist'],
-      middleware: [
-        modRewrite([
-          '!\\.\\w+$ /index.html [L]'
-        ])
-      ]
-    }
-  });
-  gulp.watch(['./app/**/*.*']).on('change', browserSync.reload);
-}
-
-// Compilar sass a css
-function style() {
-  return gulp
-  .src('./app/styles/scss/**/*.scss')
-  .pipe(sass({
-    errLogToConsole: true,
-    outputStyle: 'expanded'
-  }))
-  .pipe(autoprefixer({
-    browsers: ['last 2 versions'],
-    cascade: false
-  }))
-  .pipe(dest('./app/styles'))
-  .pipe(browserSync.stream());
+  gulp.watch(paths.styles.scss, styles);
+  gulp.watch(paths.html.src).on('change', browserSync.reload);
 }
 
 // Limpiar directorio "dist"
-function clean() {
-  return del('./dist');
+function cleanup() {
+  return del([paths.build]);
 }
 
-// Compilar "index.html" y archivos css & js
-function compile() {
+// Compilar css
+function cssBuild() {
   return gulp
-  .src('./app/index.html')
-  .pipe(usemin({
-    css: [cssnano(), 'concat', rev()],
-    html: [htmlmin({collapseWhitespace: true})],
-    js: [uglify(), rev()]
-  }))
-  .pipe(dest('./dist'))
+  .src(paths.styles.css)
+  .pipe(postcss([cssnano()]))
+  .pipe(rename('styles.css'))
+  .pipe(gulp.dest(paths.styles.dest));
 }
 
-// Copiar & minificar directorio "views"
-function views() {
+// Compilar Javascript
+function javascriptBuild() {
+  return browserify({
+    path: [paths.scripts.src],
+    debug: true,
+    transform: [
+      babelify.configure({
+        presets: ["@babel/preset-env"]
+      })
+    ]
+  })
+  .bundle()
+  .pipe(source("scripts.js"))
+  .pipe(buffer())
+  .pipe(uglify())
+  .pipe(gulp.dest(paths.scripts.dest));
+}
+
+// Compilar html
+function htmlBuild() {
   return gulp
-  .src('./app/views/**/*')
-  .pipe(htmlmin({collapseWhitespace: true}))
-  .pipe(dest('./dist/views'))
+  .src(paths.html.src)
+  .pipe(htmlmin({ collapseWhitespace: true }))
+  .pipe(gulp.dest(paths.html.dest));
 }
 
 // Copiar directorio "fonts"
-function fonts() {
+function fontsBuild() {
   return gulp
-  .src('./app/assets/fonts/**/*')
-  .pipe(dest('./dist/assets/fonts'))
+  .src(paths.fonts.src)
+  .pipe(gulp.dest(paths.fonts.dest));
 }
 
 // Minificar imágenes
-function images() {
+function imagesBuild() {
   return gulp
-  .src('app/assets/images/**/*')
+  .src(paths.images.src)
   .pipe(imagemin([
     imagemin.gifsicle({interlaced: true}),
     imagemin.jpegtran({progressive: true}),
@@ -110,20 +136,8 @@ function images() {
       ]
     })
   ]))
-  .pipe(dest('./dist/assets/images'))
+  .pipe(gulp.dest(paths.images.dest));
 }
 
-// Tareas complejas
-const build = gulp.series(clean, style, compile, views, fonts, images);
-
-// Tareas para CLI
-exports.default = serve;
-exports.serve = serve;
-exports.dist = dist;
-exports.style = style;
-exports.clean = clean;
-exports.compile = compile;
-exports.views = views;
-exports.fonts = fonts;
-exports.images = images;
-exports.build = build;
+exports.default = gulp.parallel(styles, watch);
+exports.build = gulp.series(cleanup, gulp.parallel(javascriptBuild, cssBuild, htmlBuild, fontsBuild, imagesBuild));
