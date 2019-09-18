@@ -1,12 +1,20 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "license": "MIT",
+  "private": true,
+  "main": "app/index.html",
   "scripts": {
-    "start": "gulp serve",
+    "start": "gulp",
     "build": "gulp build",
-    "try": "gulp try"
+    "test": "gulp test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/domingosantana/angular-gulp-starter.git"
+  },
+  "homepage": "https://github.com/domingosantana/angular-gulp-starter",
+  "author": "Domingo Santana",
+  "license": "MIT",
   "devDependencies": {
     "gulp": "^4.0.2",
     "browserify": "^16.5.0",
