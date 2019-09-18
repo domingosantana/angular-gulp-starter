@@ -18,9 +18,9 @@ const paths = {
   source: "app",
   build: "dist",
   styles: {
-    scss: 'app/styles/scss/**/*.scss',
-    css: 'app/styles/*.css',
-    dest: 'dist/styles/'
+    scss: 'app/scss/**/*.scss',
+    css: 'app/css/*.css',
+    dest: 'dist/'
   },
   scripts: {
     src: 'app/scripts/**/*.js',
@@ -54,7 +54,7 @@ function styles() {
       browsers: ['last 2 versions'],
       cascade: false
     })]))
-    .pipe(gulp.dest('app/styles'))
+    .pipe(gulp.dest('app/css'))
     .pipe(browserSync.stream())
   );
 }
