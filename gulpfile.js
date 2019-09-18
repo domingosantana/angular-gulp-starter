@@ -77,7 +77,7 @@ function watch() {
 // Servir directorio "dist"
 function test() {
   browserSync.init({
-    port: 8080,
+    port: 9090,
     server: {
       baseDir: "./app"
     }
