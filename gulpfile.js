@@ -18,7 +18,7 @@ const paths = {
   source: "app",
   build: "dist",
   styles: {
-    scss: 'app/scss/**/*.scss',
+    scss: 'app/scss/**/*.+(scss|sass)',
     css: 'app/css/*.css',
     dest: 'dist/'
   },
