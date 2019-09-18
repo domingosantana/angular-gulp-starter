@@ -23,8 +23,8 @@ const paths = {
     dest: 'dist/'
   },
   scripts: {
-    src: 'app/scripts/**/*.js',
-    dest: 'dist/scripts/'
+    src: 'app/js/**/*.js',
+    dest: 'dist/'
   },
   html: {
     src: 'app/**/*.html',
@@ -71,6 +71,7 @@ function watch() {
     }
   });
   gulp.watch(paths.styles.scss, styles);
+  gulp.watch(paths.scripts.src).on('change', browserSync.reload);
   gulp.watch(paths.html.src).on('change', browserSync.reload);
 }
 
