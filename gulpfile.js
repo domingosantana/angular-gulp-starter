@@ -31,12 +31,12 @@ const paths = {
     dest: 'dist/'
   },
   fonts: {
-    src: 'app/assets/fonts/**/*',
-    dest: 'dist/assets/fonts'
+    src: 'app/fonts/**/*',
+    dest: 'dist/fonts'
   },
   images: {
-    src: 'app/assets/images/**/*',
-    dest: 'dist/assets/images'
+    src: 'app/images/**/*',
+    dest: 'dist/images'
   }
 };
 
