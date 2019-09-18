@@ -15,28 +15,28 @@ imagemin = require('gulp-imagemin'),
 browserSync = require("browser-sync").create();
 
 const paths = {
-  source: "src",
-  build: "build",
+  source: "app",
+  build: "dist",
   styles: {
-    scss: 'src/styles/scss/**/*.scss',
-    css: 'src/styles/*.css',
-    dest: 'build/styles/'
+    scss: 'app/styles/scss/**/*.scss',
+    css: 'app/styles/*.css',
+    dest: 'dist/styles/'
   },
   scripts: {
-    src: 'src/scripts/**/*.js',
-    dest: 'build/scripts/'
+    src: 'app/scripts/**/*.js',
+    dest: 'dist/scripts/'
   },
   html: {
-    src: 'src/**/*.html',
-    dest: 'build/'
+    src: 'app/**/*.html',
+    dest: 'dist/'
   },
   fonts: {
-    src: 'src/assets/fonts/**/*',
-    dest: 'build/assets/fonts'
+    src: 'app/assets/fonts/**/*',
+    dest: 'dist/assets/fonts'
   },
   images: {
-    src: 'src/assets/images/**/*',
-    dest: 'build/assets/images'
+    src: 'app/assets/images/**/*',
+    dest: 'dist/assets/images'
   }
 };
 
@@ -54,7 +54,7 @@ function styles() {
       browsers: ['last 2 versions'],
       cascade: false
     })]))
-    .pipe(gulp.dest('src/styles'))
+    .pipe(gulp.dest('app/styles'))
     .pipe(browserSync.stream())
   );
 }
@@ -64,7 +64,7 @@ function watch() {
   browserSync.init({
     port: 8080,
     server: {
-      baseDir: "./src",
+      baseDir: "./app",
       routes: {
         "/node_modules": "node_modules"
       }
@@ -72,6 +72,16 @@ function watch() {
   });
   gulp.watch(paths.styles.scss, styles);
   gulp.watch(paths.html.src).on('change', browserSync.reload);
+}
+
+// Servir directorio "dist"
+function test() {
+  browserSync.init({
+    port: 8080,
+    server: {
+      baseDir: "./app"
+    }
+  });
 }
 
 // Limpiar directorio "dist"
@@ -141,3 +151,4 @@ function imagesBuild() {
 
 exports.default = gulp.parallel(styles, watch);
 exports.build = gulp.series(cleanup, gulp.parallel(javascriptBuild, cssBuild, htmlBuild, fontsBuild, imagesBuild));
+exports.test = test;
