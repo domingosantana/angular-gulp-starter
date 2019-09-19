@@ -1,5 +1,8 @@
 require('angular');
 require('angular-route');
+require("jquery"); // Necesario para Bootstrap
+require("popper.js"); // Necesario para Bootstrap
+require('bootstrap');
 
 angular.module('app', ['ngRoute'])
 
