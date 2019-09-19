@@ -2,7 +2,7 @@
   "name": "app",
   "version": "1.0.0",
   "private": true,
-  "main": "app/index.html",
+  "main": "app/js/app.js",
   "scripts": {
     "start": "gulp",
     "build": "gulp build",

@@ -1,4 +1,26 @@
 @import url("https://fonts.googleapis.com/css?family=Archivo:400,500&display=swap");
+body {
+  font-family: "Archivo", sans-serif;
+  font-size: 17px;
+  line-height: 27px;
+  font-weight: 400;
+  color: #000000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  -webkit-transition-property: color;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease;
+  text-decoration: none;
+  color: #000000;
+}
+
+a:hover {
+  color: #000000;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
@@ -6,7 +28,7 @@
 
 .img-thumbnail {
   padding: 0.25rem;
-  background-color: #fff;
+  background-color: #FFFFFF;
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
@@ -1244,7 +1266,7 @@ button.bg-dark:focus {
 }
 
 .bg-white {
-  background-color: #fff !important;
+  background-color: #FFFFFF !important;
 }
 
 .bg-transparent {
@@ -1324,7 +1346,7 @@ button.bg-dark:focus {
 }
 
 .border-white {
-  border-color: #fff !important;
+  border-color: #FFFFFF !important;
 }
 
 .rounded-sm {
@@ -4617,7 +4639,7 @@ button.bg-dark:focus {
 }
 
 .text-white {
-  color: #fff !important;
+  color: #FFFFFF !important;
 }
 
 .text-primary {
@@ -4727,26 +4749,4 @@ a.text-dark:hover, a.text-dark:focus {
 
 .invisible {
   visibility: hidden !important;
-}
-
-body {
-  font-family: "Archivo", sans-serif;
-  font-size: 17px;
-  line-height: 27px;
-  font-weight: 400;
-  color: #000;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  -webkit-transition-property: color;
-  -webkit-transition-duration: 0.5s;
-  -webkit-transition-timing-function: ease;
-  text-decoration: none;
-  color: #000;
-}
-
-a:hover {
-  color: #000;
 }

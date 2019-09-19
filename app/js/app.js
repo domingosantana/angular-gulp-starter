@@ -1,3 +1,6 @@
+require('angular');
+require('angular-route');
+
 angular.module('app', ['ngRoute'])
 
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -5,8 +8,7 @@ angular.module('app', ['ngRoute'])
   $locationProvider.html5Mode(true);
 
   $routeProvider
-    .when('/', { templateUrl: 'views/home.html', controller: 'MyController' })
-    // .when('/view', { template: 'views/view.html' })
-    .otherwise({ redirectTo: '/' });
+  .when('/', { templateUrl: 'views/home.html' })
+  .otherwise({ redirectTo: '/' });
 
 }]);

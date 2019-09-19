@@ -18,17 +18,16 @@ const paths = {
   source: "app",
   build: "dist",
   styles: {
-    scss: 'app/scss/**/*.+(scss|sass)',
-    css: 'app/css/*.css',
-    dest: 'dist/'
+    src: 'app/styles/**/*.scss',
+    dest: 'dist'
   },
   scripts: {
     src: 'app/js/**/*.js',
-    dest: 'dist/'
+    dest: 'dist'
   },
   html: {
     src: 'app/**/*.html',
-    dest: 'dist/'
+    dest: 'dist'
   },
   fonts: {
     src: 'app/fonts/**/*',
@@ -40,26 +39,7 @@ const paths = {
   }
 };
 
-// Compilar scss a css
-function styles() {
-  return (
-    gulp
-    .src(paths.styles.scss)
-    .pipe(sass({
-      errLogToConsole: true,
-      outputStyle: 'expanded'
-    }))
-    .on("error", sass.logError)
-    .pipe(postcss([autoprefixer({
-      browsers: ['last 2 versions'],
-      cascade: false
-    })]))
-    .pipe(gulp.dest('app/css'))
-    .pipe(browserSync.stream())
-  );
-}
-
-// Servir directorio "src"
+// Servir directorio "app"
 function watch() {
   browserSync.init({
     port: 8080,
@@ -70,13 +50,13 @@ function watch() {
       }
     }
   });
-  gulp.watch(paths.styles.scss, styles);
-  gulp.watch(paths.scripts.src).on('change', browserSync.reload);
+  gulp.watch(paths.styles.src, styles);
+  gulp.watch(paths.scripts.src, scripts);
   gulp.watch(paths.html.src).on('change', browserSync.reload);
 }
 
 // Servir directorio "dist"
-function test() {
+function dist() {
   browserSync.init({
     port: 9090,
     server: {
@@ -85,23 +65,30 @@ function test() {
   });
 }
 
-// Limpiar directorio "dist"
-function cleanup() {
-  return del([paths.build]);
+// Compilar scss a css
+function styles() {
+  return (
+    gulp
+    .src(paths.styles.src)
+    .pipe(sass({
+      errLogToConsole: true,
+      outputStyle: 'expanded'
+    }))
+    .on("error", sass.logError)
+    .pipe(postcss([autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    })]))
+    .pipe(rename("styles.min.css"))
+    .pipe(gulp.dest(paths.source))
+    .pipe(browserSync.stream())
+  );
 }
 
-// Compilar css
-function cssBuild() {
-  return gulp
-  .src(paths.styles.css)
-  .pipe(postcss([cssnano()]))
-  .pipe(rename('styles.css'))
-  .pipe(gulp.dest(paths.styles.dest));
-}
-
-// Compilar Javascript
-function javascriptBuild() {
+// Concatenar Javascript
+function scripts() {
   return browserify({
+    entries: 'app/js/app.js',
     path: [paths.scripts.src],
     debug: true,
     transform: [
@@ -111,7 +98,47 @@ function javascriptBuild() {
     ]
   })
   .bundle()
-  .pipe(source("scripts.js"))
+  .pipe(source("scripts.min.js"))
+  .pipe(buffer())
+  .pipe(uglify())
+  .pipe(gulp.dest(paths.source));
+}
+
+// Compilar app
+
+// Compilar scss a css
+function stylesBuild() {
+  return (
+    gulp
+    .src(paths.styles.src)
+    .pipe(sass({
+      errLogToConsole: true,
+      outputStyle: 'expanded'
+    }))
+    .on("error", sass.logError)
+    .pipe(postcss([autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    })]))
+    .pipe(rename("styles.min.css"))
+    .pipe(gulp.dest(paths.styles.dest))
+  );
+}
+
+// Compilar Javascript
+function scriptsBuild() {
+  return browserify({
+    entries: 'app/js/app.js',
+    path: [paths.scripts.src],
+    debug: true,
+    transform: [
+      babelify.configure({
+        presets: ["@babel/preset-env"]
+      })
+    ]
+  })
+  .bundle()
+  .pipe(source("scripts.min.js"))
   .pipe(buffer())
   .pipe(uglify())
   .pipe(gulp.dest(paths.scripts.dest));
@@ -150,6 +177,13 @@ function imagesBuild() {
   .pipe(gulp.dest(paths.images.dest));
 }
 
-exports.default = gulp.parallel(styles, watch);
-exports.build = gulp.series(cleanup, gulp.parallel(javascriptBuild, cssBuild, htmlBuild, fontsBuild, imagesBuild));
-exports.test = test;
+// Limpiar directorio "dist"
+function cleanup() {
+  return del([paths.build]);
+}
+
+exports.default = gulp.parallel(styles, scripts, watch);
+exports.build = gulp.series(cleanup, gulp.parallel(scriptsBuild, stylesBuild, htmlBuild, fontsBuild, imagesBuild));
+exports.dist = dist;
+exports.styles = styles;
+exports.scripts = scripts;
