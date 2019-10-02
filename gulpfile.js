@@ -45,6 +45,11 @@ function watch() {
     port: 8080,
     server: {
       baseDir: "./app",
+      middleware: [
+        modRewrite([
+          '!\\.\\w+$ /index.html [L]'
+        ])
+      ],
       routes: {
         "/node_modules": "node_modules"
       }
