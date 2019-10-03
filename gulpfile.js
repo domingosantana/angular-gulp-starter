@@ -1,5 +1,6 @@
 const gulp = require("gulp"),
 browserify = require("browserify"),
+modRewrite = require('connect-modrewrite'),
 babelify = require("babelify"),
 source = require("vinyl-source-stream"),
 buffer = require("vinyl-buffer"),
@@ -43,6 +44,7 @@ const paths = {
 function watch() {
   browserSync.init({
     port: 8080,
+    hostname: '0.0.0.0',
     server: {
       baseDir: "./app",
       middleware: [

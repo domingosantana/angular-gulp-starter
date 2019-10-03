@@ -44,9 +44,9 @@
 </head>
 <body ng-app="app">
 
-  <div ng-include="'views/shared/header.html'"></div>
-  <div ng-view></div>
-  <div ng-include="'views/shared/footer.html'"></div>
+  <div ui-view="header"></div>
+  <div ui-view=""></div>
+  <div ui-view="footer"></div>
 
   <script src="scripts.min.js"></script>
 

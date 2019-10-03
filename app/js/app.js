@@ -1,17 +1,29 @@
 require('angular');
-require('angular-route');
+require('angular-ui-router');
 require("jquery"); // Necesario para Bootstrap
 require("popper.js"); // Necesario para Bootstrap
 require('bootstrap');
 
-angular.module('app', ['ngRoute'])
+angular.module('app', ['ui.router'])
 
-.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $locationProvider.html5Mode(true);
+  $urlRouterProvider.when('', '/');
+  $urlRouterProvider.otherwise("/");
 
-  $routeProvider
-  .when('/', { templateUrl: 'views/home.html' })
-  .otherwise({ redirectTo: '/' });
+  $stateProvider
+  .state('app', {
+    abstract: true,
+    views: {
+      "header": { templateUrl: "views/shared/header.html" },
+      "": { templateUrl: "index.html" },
+      "footer": { templateUrl: "views/shared/footer.html" }
+    }
+  })
+  .state('app.home', {
+    url: "/",
+    templateUrl: "views/home.html"
+  })
 
 }]);
