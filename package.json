@@ -4,18 +4,18 @@
   "private": true,
   "main": "app/js/app.js",
   "scripts": {
-    "start": "gulp",
-    "build": "gulp build",
-    "test": "gulp dist"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/domingosantana/angular-gulp-starter.git"
   },
   "homepage": "https://github.com/domingosantana/angular-gulp-starter",
-  "author": "Domingo Santana",
+  "author": "Domingo Santana <hello@domingosantana.com> (http://domingosantana.com)",
   "license": "MIT",
   "devDependencies": {
+    "yarn": "^1.19.1",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "gulp": "^4.0.2",
     "browserify": "^16.5.0",
     "babelify": "^10.0.0",
@@ -31,16 +31,13 @@
     "gulp-rename": "^1.4.0",
     "browser-sync": "^2.26.7",
     "connect-modrewrite": "^0.10.2",
-    "gulp-imagemin": "^6.1.0",
-    "jquery": "^3.4.1",
-    "popper.js": "^1.15.0",
-    "bootstrap": "^4.3.1"
+    "gulp-imagemin": "^6.1.0"
   },
   "dependencies": {
-    "npm": "^6.11.2",
-    "@babel/core": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
     "angular": "^1.7.8",
-    "angular-ui-router": "^1.0.23"
+    "angular-ui-router": "^1.0.23",
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
   }
 }
