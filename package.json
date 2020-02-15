@@ -13,7 +13,7 @@
   "author": "Domingo Santana <hello@domingosantana.com> (http://domingosantana.com)",
   "license": "MIT",
   "devDependencies": {
-    "yarn": "^1.19.1",
+    "yarn": "^1.22.0",
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "gulp": "^4.0.2",
